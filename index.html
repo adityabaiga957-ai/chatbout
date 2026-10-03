@@ -1,64 +1,283 @@
-Here’s a polished version with clearer structure and more concise wording:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
- Changing an article's title✓
+  <title>My Chatbot</title>
 
-# Changing an article's title
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
 
- When you change the title of an article, you may need to update the title in several places to keep the documentation, links, and metadata consistent.
+    body {
+      background: #f4f7fb;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
- ## Changing the title of an article
+    .chat-container {
+      width: 100%;
+      max-width: 500px;
+      height: 700px;
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
 
- Sometimes, you may need to change the title of a help article. Before retitling an article, consider all the places where the title, filename, or URL is referenced.
+    .chat-header {
+      background: #24292f;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
 
- ## Background on changing the filename
+    .chat-header h1 {
+      font-size: 22px;
+    }
 
- An article's title corresponds directly to the name of the Markdown file that contains the article. This is important for a couple of reasons:
+    .chat-header p {
+      margin-top: 5px;
+      font-size: 13px;
+      color: #c9d1d9;
+    }
 
- - **SEO:** Using words that accurately describe the article's content in the URL can help search engines understand and rank the article. For more information, see "Improve the structure of your URLs" in the [Google Search Engine Optimization Starter Guide](<http://static.googleusercontent.com/media/www.google.com/en//webmasters/docs/search-engine-optimization-starter-guide.pdf>).
+    .messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: #f6f8fa;
+    }
 
- ## Places to update when you change a title
+    .message {
+      display: flex;
+      margin-bottom: 15px;
+    }
 
- When you give an article a new title, review the following locations and update them as needed.
+    .message.user {
+      justify-content: flex-end;
+    }
 
- ### Frontmatter and metadata
+    .bubble {
+      max-width: 80%;
+      padding: 12px 16px;
+      border-radius: 16px;
+      line-height: 1.4;
+      font-size: 15px;
+    }
 
- Each article contains a metadata section, or frontmatter, at the **top of the article**. It uses YAML syntax and generates the article's title. It can also contain other important data, such as redirects and, in some cases, short-description conrefs that link to reusable introductory text.
+    .bot .bubble {
+      background: #e1e4e8;
+      color: #24292f;
+      border-bottom-left-radius: 4px;
+    }
 
-```
----
-title: Your article name
-intro:
-redirect_from:
-  - /articles/older-outdated-article-name/
----
-```
+    .user .bubble {
+      background: #0969da;
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
 
- #### Frontmatter update checklist
+    .typing {
+      display: none;
+      padding: 10px 20px;
+      color: #666;
+      font-size: 13px;
+    }
 
- - Update the `title` using sentence case.
-- Update `redirect_from`. Almost every time you retitle an article, add a redirect for the article's old URL.
-- Preserve any existing redirects from the old article's frontmatter.
+    .input-area {
+      display: flex;
+      padding: 15px;
+      gap: 10px;
+      border-top: 1px solid #ddd;
+      background: white;
+    }
 
- ### Filename
+    #messageInput {
+      flex: 1;
+      padding: 13px 15px;
+      border: 1px solid #ccc;
+      border-radius: 25px;
+      outline: none;
+      font-size: 15px;
+    }
 
- Use the `git mv` command in your terminal to rename the Markdown file:
+    #messageInput:focus {
+      border-color: #0969da;
+    }
 
-```
-git mv old-article-name.md new-article-name.md
-```
+    #sendButton {
+      border: none;
+      background: #0969da;
+      color: white;
+      padding: 0 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 15px;
+    }
 
- ### Parent index file
+    #sendButton:hover {
+      background: #0757b5;
+    }
 
- Update the link to the renamed file in its parent `index.md` file. The parent index generates the table of contents (TOC).
+    @media (max-width: 600px) {
+      body {
+        align-items: stretch;
+      }
 
- ### Inline links within other articles
+      .chat-container {
+        height: 100vh;
+        border-radius: 0;
+      }
+    }
+  </style>
+</head>
 
- Documentation articles can link to one another. Search for both the old filename and the old title to find links that need to be updated.
+<body>
 
- ### Links across GitHub
+  <div class="chat-container">
 
- Search the GitHub product codebase for links that reference the old title or URL. If you find outdated links, contact the relevant team or engineers and let them know that the article's title has changed.
+    <header class="chat-header">
+      <h1>🤖 My Chatbot</h1>
+      <p>Ask me anything</p>
+    </header>
 
- If you're not sure who to contact, ask a member of the GitHub Docs team. As a courtesy, you can also create a pull request with the updated links and ask the relevant team to merge it after the new article title ships.
+    <main id="messages" class="messages">
 
- If you want, I can also make this more concise and align it more closely with the style of a GitHub Docs procedural article.
+      <div class="message bot">
+        <div class="bubble">
+          Hello! 👋 I'm your chatbot. How can I help you?
+        </div>
+      </div>
+
+    </main>
+
+    <div id="typing" class="typing">
+      Bot is typing...
+    </div>
+
+    <form id="chatForm" class="input-area">
+      <input
+        id="messageInput"
+        type="text"
+        placeholder="Type your message..."
+        autocomplete="off"
+        required
+      >
+
+      <button id="sendButton" type="submit">
+        Send
+      </button>
+    </form>
+
+  </div>
+
+  <script>
+    // ==========================
+    // Chatbot initialization
+    // ==========================
+
+    const chatForm = document.getElementById("chatForm");
+    const messageInput = document.getElementById("messageInput");
+    const messages = document.getElementById("messages");
+    const typing = document.getElementById("typing");
+
+
+    // Add a message to the chat
+    function addMessage(text, sender) {
+
+      const message = document.createElement("div");
+      message.className = `message ${sender}`;
+
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+
+      bubble.textContent = text;
+
+      message.appendChild(bubble);
+      messages.appendChild(message);
+
+      // Automatically scroll to the newest message
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+
+    // Simple chatbot response
+    function getBotResponse(message) {
+
+      const text = message.toLowerCase().trim();
+
+      if (text.includes("hello") || text.includes("hi")) {
+        return "Hello! 👋 Nice to meet you.";
+      }
+
+      if (text.includes("how are you")) {
+        return "I'm doing great! 🤖";
+      }
+
+      if (text.includes("name")) {
+        return "I'm My Chatbot.";
+      }
+
+      if (text.includes("github")) {
+        return "You can host this chatbot using GitHub Pages.";
+      }
+
+      if (text.includes("bye")) {
+        return "Goodbye! 👋";
+      }
+
+      return "I'm still learning. 🤔 You can connect me to an AI API to make me smarter!";
+    }
+
+
+    // Handle message submission
+    chatForm.addEventListener("submit", function(event) {
+
+      event.preventDefault();
+
+      const userMessage = messageInput.value.trim();
+
+      if (!userMessage) {
+        return;
+      }
+
+      // Display user message
+      addMessage(userMessage, "user");
+
+      // Clear input
+      messageInput.value = "";
+
+      // Show typing indicator
+      typing.style.display = "block";
+
+      // Generate bot response
+      setTimeout(function() {
+
+        const response = getBotResponse(userMessage);
+
+        typing.style.display = "none";
+
+        addMessage(response, "bot");
+
+      }, 600);
+    });
+
+
+    // Focus input when page loads
+    window.addEventListener("load", function() {
+      messageInput.focus();
+    });
+  </script>
+
+</body>
+</html>
