@@ -1,0 +1,64 @@
+Here’s a polished version with clearer structure and more concise wording:
+
+ Changing an article's title✓
+
+# Changing an article's title
+
+ When you change the title of an article, you may need to update the title in several places to keep the documentation, links, and metadata consistent.
+
+ ## Changing the title of an article
+
+ Sometimes, you may need to change the title of a help article. Before retitling an article, consider all the places where the title, filename, or URL is referenced.
+
+ ## Background on changing the filename
+
+ An article's title corresponds directly to the name of the Markdown file that contains the article. This is important for a couple of reasons:
+
+ - **SEO:** Using words that accurately describe the article's content in the URL can help search engines understand and rank the article. For more information, see "Improve the structure of your URLs" in the [Google Search Engine Optimization Starter Guide](<http://static.googleusercontent.com/media/www.google.com/en//webmasters/docs/search-engine-optimization-starter-guide.pdf>).
+
+ ## Places to update when you change a title
+
+ When you give an article a new title, review the following locations and update them as needed.
+
+ ### Frontmatter and metadata
+
+ Each article contains a metadata section, or frontmatter, at the **top of the article**. It uses YAML syntax and generates the article's title. It can also contain other important data, such as redirects and, in some cases, short-description conrefs that link to reusable introductory text.
+
+```
+---
+title: Your article name
+intro:
+redirect_from:
+  - /articles/older-outdated-article-name/
+---
+```
+
+ #### Frontmatter update checklist
+
+ - Update the `title` using sentence case.
+- Update `redirect_from`. Almost every time you retitle an article, add a redirect for the article's old URL.
+- Preserve any existing redirects from the old article's frontmatter.
+
+ ### Filename
+
+ Use the `git mv` command in your terminal to rename the Markdown file:
+
+```
+git mv old-article-name.md new-article-name.md
+```
+
+ ### Parent index file
+
+ Update the link to the renamed file in its parent `index.md` file. The parent index generates the table of contents (TOC).
+
+ ### Inline links within other articles
+
+ Documentation articles can link to one another. Search for both the old filename and the old title to find links that need to be updated.
+
+ ### Links across GitHub
+
+ Search the GitHub product codebase for links that reference the old title or URL. If you find outdated links, contact the relevant team or engineers and let them know that the article's title has changed.
+
+ If you're not sure who to contact, ask a member of the GitHub Docs team. As a courtesy, you can also create a pull request with the updated links and ask the relevant team to merge it after the new article title ships.
+
+ If you want, I can also make this more concise and align it more closely with the style of a GitHub Docs procedural article.
