@@ -1,283 +1,257 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aditya AI Chatbot</title>
 
-  <title>My Chatbot</title>
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #101827;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
+.chatbox {
+  width: 95%;
+  max-width: 450px;
+  height: 600px;
+  background: #1e293b;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 0 25px #000;
+}
 
-    body {
-      background: #f4f7fb;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+header {
+  background: #2563eb;
+  padding: 20px;
+  text-align: center;
+  font-size: 23px;
+  font-weight: bold;
+}
 
-    .chat-container {
-      width: 100%;
-      max-width: 500px;
-      height: 700px;
-      background: white;
-      border-radius: 18px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
+#messages {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+}
 
-    .chat-header {
-      background: #24292f;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
+.message {
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 12px;
+  max-width: 85%;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
 
-    .chat-header h1 {
-      font-size: 22px;
-    }
+.bot {
+  background: #334155;
+  margin-right: auto;
+}
 
-    .chat-header p {
-      margin-top: 5px;
-      font-size: 13px;
-      color: #c9d1d9;
-    }
+.user {
+  background: #2563eb;
+  margin-left: auto;
+}
 
-    .messages {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
-      background: #f6f8fa;
-    }
+.input-area {
+  display: flex;
+  padding: 12px;
+  background: #0f172a;
+  gap: 8px;
+}
 
-    .message {
-      display: flex;
-      margin-bottom: 15px;
-    }
+input {
+  flex: 1;
+  min-width: 0;
+  padding: 13px;
+  border: none;
+  border-radius: 10px;
+  outline: none;
+  font-size: 16px;
+}
 
-    .message.user {
-      justify-content: flex-end;
-    }
+button {
+  background: #22c55e;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 16px;
+}
 
-    .bubble {
-      max-width: 80%;
-      padding: 12px 16px;
-      border-radius: 16px;
-      line-height: 1.4;
-      font-size: 15px;
-    }
+button:hover {
+  background: #16a34a;
+}
 
-    .bot .bubble {
-      background: #e1e4e8;
-      color: #24292f;
-      border-bottom-left-radius: 4px;
-    }
-
-    .user .bubble {
-      background: #0969da;
-      color: white;
-      border-bottom-right-radius: 4px;
-    }
-
-    .typing {
-      display: none;
-      padding: 10px 20px;
-      color: #666;
-      font-size: 13px;
-    }
-
-    .input-area {
-      display: flex;
-      padding: 15px;
-      gap: 10px;
-      border-top: 1px solid #ddd;
-      background: white;
-    }
-
-    #messageInput {
-      flex: 1;
-      padding: 13px 15px;
-      border: 1px solid #ccc;
-      border-radius: 25px;
-      outline: none;
-      font-size: 15px;
-    }
-
-    #messageInput:focus {
-      border-color: #0969da;
-    }
-
-    #sendButton {
-      border: none;
-      background: #0969da;
-      color: white;
-      padding: 0 20px;
-      border-radius: 25px;
-      cursor: pointer;
-      font-size: 15px;
-    }
-
-    #sendButton:hover {
-      background: #0757b5;
-    }
-
-    @media (max-width: 600px) {
-      body {
-        align-items: stretch;
-      }
-
-      .chat-container {
-        height: 100vh;
-        border-radius: 0;
-      }
-    }
-  </style>
+</style>
 </head>
 
 <body>
 
-  <div class="chat-container">
+<div class="chatbox">
 
-    <header class="chat-header">
-      <h1>🤖 My Chatbot</h1>
-      <p>Ask me anything</p>
-    </header>
+<header>🤖 Aditya AI Chatbot</header>
 
-    <main id="messages" class="messages">
-
-      <div class="message bot">
-        <div class="bubble">
-          Hello! 👋 I'm your chatbot. How can I help you?
-        </div>
-      </div>
-
-    </main>
-
-    <div id="typing" class="typing">
-      Bot is typing...
-    </div>
-
-    <form id="chatForm" class="input-area">
-      <input
-        id="messageInput"
-        type="text"
-        placeholder="Type your message..."
-        autocomplete="off"
-        required
-      >
-
-      <button id="sendButton" type="submit">
-        Send
-      </button>
-    </form>
-
+<div id="messages">
+  <div class="message bot">
+    नमस्ते आदित्य! 👋<br>
+    मैं तुम्हारा AI Chatbot हूँ।<br>
+    मुझसे जोड़, घटाना, गुणा और भाग पूछ सकते हो।
   </div>
+</div>
 
-  <script>
-    // ==========================
-    // Chatbot initialization
-    // ==========================
+<div class="input-area">
+  <input id="userInput" placeholder="अपना सवाल लिखो..."
+  onkeydown="if(event.key==='Enter') sendMessage()">
+  <button onclick="sendMessage()">भेजें</button>
+</div>
 
-    const chatForm = document.getElementById("chatForm");
-    const messageInput = document.getElementById("messageInput");
-    const messages = document.getElementById("messages");
-    const typing = document.getElementById("typing");
+</div>
 
+<script>
 
-    // Add a message to the chat
-    function addMessage(text, sender) {
+const messages = document.getElementById("messages");
+const input = document.getElementById("userInput");
 
-      const message = document.createElement("div");
-      message.className = `message ${sender}`;
+function addMessage(text, type) {
+  const div = document.createElement("div");
+  div.className = "message " + type;
+  div.textContent = text;
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+}
 
-      const bubble = document.createElement("div");
-      bubble.className = "bubble";
+// गणित का जवाब
+function calculate(question) {
 
-      bubble.textContent = text;
+  let q = question.toLowerCase().trim();
 
-      message.appendChild(bubble);
-      messages.appendChild(message);
+  // पहले सीधे गणित का expression जाँचो
+  let expression = q.match(/-?\d+(?:\.\d+)?\s*[+\-*/×÷]\s*-?\d+(?:\.\d+)?/);
 
-      // Automatically scroll to the newest message
-      messages.scrollTop = messages.scrollHeight;
+  if (expression) {
+    return solve(expression[0]);
+  }
+
+  // सवाल में से नंबर निकालो
+  let numbers = q.match(/-?\d+(?:\.\d+)?/g);
+
+  if (!numbers || numbers.length < 2) return null;
+
+  let a = Number(numbers[0]);
+  let b = Number(numbers[1]);
+
+  // जोड़
+  if (/जोड़|जोड़ो|जमा|plus|add|addition|\bमें मिलाओ\b/.test(q)) {
+    return `${a} + ${b} = ${a + b}`;
+  }
+
+  // घटाना
+  if (/घटा|घटाओ|minus|subtract|subtraction|कम करो/.test(q)) {
+    // "10 में से 4 घटाओ" का जवाब 6 होगा
+    if (/में से/.test(q)) {
+      return `${a} - ${b} = ${a - b}`;
     }
+    return `${a} - ${b} = ${a - b}`;
+  }
 
+  // गुणा
+  if (/गुणा|गुणा करो|multiply|multiplication|times/.test(q)) {
+    return `${a} × ${b} = ${a * b}`;
+  }
 
-    // Simple chatbot response
-    function getBotResponse(message) {
+  // भाग
+  if (/भाग|बांटो|divide|division|divided/.test(q)) {
+    if (b === 0) return "शून्य से भाग नहीं दे सकते!";
+    return `${a} ÷ ${b} = ${a / b}`;
+  }
 
-      const text = message.toLowerCase().trim();
+  return null;
+}
 
-      if (text.includes("hello") || text.includes("hi")) {
-        return "Hello! 👋 Nice to meet you.";
-      }
+// Expression हल करना
+function solve(exp) {
+  let parts = exp.match(/(-?\d+(?:\.\d+)?)\s*([+\-*/×÷])\s*(-?\d+(?:\.\d+)?)/);
 
-      if (text.includes("how are you")) {
-        return "I'm doing great! 🤖";
-      }
+  if (!parts) return null;
 
-      if (text.includes("name")) {
-        return "I'm My Chatbot.";
-      }
+  let a = Number(parts[1]);
+  let op = parts[2];
+  let b = Number(parts[3]);
+  let result;
 
-      if (text.includes("github")) {
-        return "You can host this chatbot using GitHub Pages.";
-      }
+  switch(op) {
+    case "+": result = a + b; break;
+    case "-": result = a - b; break;
+    case "*":
+    case "×": result = a * b; break;
+    case "/":
+    case "÷":
+      if (b === 0) return "शून्य से भाग नहीं दे सकते!";
+      result = a / b;
+      break;
+    default: return null;
+  }
 
-      if (text.includes("bye")) {
-        return "Goodbye! 👋";
-      }
+  return `${a} ${op} ${b} = ${result}`;
+}
 
-      return "I'm still learning. 🤔 You can connect me to an AI API to make me smarter!";
-    }
+function getReply(question) {
 
+  let q = question.toLowerCase();
 
-    // Handle message submission
-    chatForm.addEventListener("submit", function(event) {
+  // गणित
+  let mathAnswer = calculate(q);
+  if (mathAnswer !== null) return mathAnswer;
 
-      event.preventDefault();
+  // सामान्य जवाब
+  if (q.includes("नमस्ते") || q.includes("hello") || q.includes("hi")) {
+    return "नमस्ते आदित्य! 😊 बताओ क्या करना है?";
+  }
 
-      const userMessage = messageInput.value.trim();
+  if (q.includes("नाम") || q.includes("name")) {
+    return "मेरा नाम Aditya AI Chatbot है! 🤖";
+  }
 
-      if (!userMessage) {
-        return;
-      }
+  if (q.includes("कैसे हो") || q.includes("how are you")) {
+    return "मैं बिल्कुल ठीक हूँ! तुम कैसे हो? 😊";
+  }
 
-      // Display user message
-      addMessage(userMessage, "user");
+  if (q.includes("धन्यवाद") || q.includes("thank")) {
+    return "तुम्हारा स्वागत है आदित्य! ❤️";
+  }
 
-      // Clear input
-      messageInput.value = "";
+  return "मुझे यह सवाल समझ नहीं आया। तुम मुझसे गणित के सवाल पूछ सकते हो, जैसे 5 + 5 या 10 में से 4 घटाओ।";
+}
 
-      // Show typing indicator
-      typing.style.display = "block";
+function sendMessage() {
 
-      // Generate bot response
-      setTimeout(function() {
+  let question = input.value.trim();
 
-        const response = getBotResponse(userMessage);
+  if (question === "") return;
 
-        typing.style.display = "none";
+  addMessage(question, "user");
 
-        addMessage(response, "bot");
+  let answer = getReply(question);
 
-      }, 600);
-    });
+  addMessage(answer, "bot");
 
+  input.value = "";
+  input.focus();
+}
 
-    // Focus input when page loads
-    window.addEventListener("load", function() {
-      messageInput.focus();
-    });
-  </script>
+</script>
 
 </body>
 </html>
